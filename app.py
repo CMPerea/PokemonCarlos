@@ -22,11 +22,11 @@ def load_data():
         lambda x: f"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{x}.png"
     )
 
-    # Crear columna 'Generación' si no existe
+    # Crear columna 'Generación'
     if "Generación" not in df.columns:
         df["Generación"] = pd.cut(
             df.index,
-            bins=[0, 151, 251, 386, 493, 649, 721, 809, 898, 1010],
+            bins=[0, 152, 252, 387, 494, 650, 722, 810, 890, 1010],
             labels=["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"],
             include_lowest=True
         )
@@ -36,9 +36,8 @@ def load_data():
 
 df = load_data()
 
-# ==========================
 # Configuración general
-# ==========================
+
 st.set_page_config(page_title="Pokédex - Dashboard", layout="wide")
 
 TYPE_COLORS = {
@@ -70,9 +69,9 @@ def get_color_for_type(type_str: str) -> str:
     return TYPE_COLORS.get(primary_type, "#DDDDDD")
 
 
-# ==========================
-# Estilos personalizados
-# ==========================
+
+# Estilos 
+
 st.markdown("""
     <style>
     .stApp {
@@ -151,9 +150,9 @@ filtered_df = filtered_df[
 
 st.write(f"Mostrando {len(filtered_df)} Pokémon según los filtros aplicados.")
 
-# ==========================
-# Métricas destacadas
-# ==========================
+
+# Métricas 
+
 st.markdown("### Pokémon destacados")
 
 col1, col2, col3 = st.columns(3)
@@ -185,9 +184,9 @@ for title, poke, stat_name, col in metrics:
             unsafe_allow_html=True
         )
 
-# ==========================
-# Gráficas principales
-# ==========================
+
+# Gráficas 
+
 st.subheader("Análisis general de estadísticas")
 
 col_g1, col_g2 = st.columns(2)
@@ -202,9 +201,9 @@ st.subheader("Promedio de poder por país")
 avg_stats = df.groupby("Country")[["Attack", "Defense", "Speed"]].mean().sort_values("Attack", ascending=False)
 st.bar_chart(avg_stats)
 
-# ==========================
+
 # Nuevas gráficas relevantes
-# ==========================
+
 st.subheader("Promedio de estadísticas por tipo")
 avg_by_type = df.groupby("Type")[["Attack", "Defense", "Speed", "Total"]].mean().sort_values("Total", ascending=False)
 st.bar_chart(avg_by_type)
@@ -221,9 +220,9 @@ ax.set_ylabel("Defensa")
 ax.set_title("Dispersión entre ataque y defensa")
 st.pyplot(fig)
 
-# ==========================
+
 # Galería de Pokémon (filtrada por generación)
-# ==========================
+
 st.subheader("Galería de Pokémon")
 
 if selected_generation != "Todas":
